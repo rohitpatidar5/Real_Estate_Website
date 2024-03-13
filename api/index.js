@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import userRouter from './routes/user.route.js' //her we are changing the name of router to userRouter to avoid naming confusion
+import cookieParser from 'cookie-parser'
 import authRouter from './routes/auth.route.js'
 dotenv.config();
 
@@ -16,6 +17,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 const app = express()
 
 app.use(express.json());//thi is going to allow json as an input of the server
+app.use(cookieParser());
 
 
 
