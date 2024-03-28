@@ -21,11 +21,12 @@ function Header() {
             <li className='hidden sm:inline text-slate-700 hover:underline'><Link to='/'>Home</Link></li>
             <li className='hidden sm:inline text-slate-700 hover:underline'><Link to='/about'>About</Link></li>
             <Link to='profile'>
-            {currentUser ?(
+            {currentUser ? (
               <img className='rounded-full h-7 w-7 object-cover' src={currentUser.avatar} alt="porfile" />
             ):(
-            <li className=' text-slate-700 hover:underline'>Sign in</li>)}
-              </Link>
+            <li className=' text-slate-700 hover:underline'>Sign in</li>)
+          }
+          </Link>
         </ul>
         </div>
 

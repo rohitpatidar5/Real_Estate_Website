@@ -20,14 +20,14 @@ function SignUp() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch("/api/auth/signup", {   //'http://localhost:3000/api/auth/signup->use proxy
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), //stringify for more secure
       });
-      const data = await res.json();
+      const data = await res.json(); //convert the data in json
       console.log(data);
       if (data.success === false) {
         setLoading(false);
@@ -35,8 +35,8 @@ function SignUp() {
         return;
       }
       setLoading(false);
-      setError(null);
-      navigate("/sign-in");
+      setError(null); //if everything is fine it will clear all previous error
+      navigate("/sign-in"); //after sign up redirect use to sign in page  
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -64,7 +64,7 @@ function SignUp() {
           onChange={handleChange}
         />
         <input
-          type="password"
+          type="password" 
           placeholder="password"
           className="border p-3 rounded"
           id="password"

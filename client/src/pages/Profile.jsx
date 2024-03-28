@@ -17,7 +17,7 @@ function Profile() {
   const [formData, setFormData] = useState({});
   
 
-  //firebase storage
+  //firebase storage on website
   // allow read;
   // allow write: if
   // request.resource.size < 2* 1024 * 1024 &&
@@ -35,6 +35,7 @@ function Profile() {
     const strorageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(strorageRef, file);
 
+    //to show the upload percentage
     uploadTask.on("state_changed", (snapshot) => {
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       setFilePerc(Math.round(progress));
@@ -48,6 +49,7 @@ function Profile() {
       );
     }
     );
+    
   };
 
   return (
@@ -70,14 +72,14 @@ function Profile() {
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
         />
         <p className=" text-sm self-center">
-          {fileUploadError ? (<span className="text-red-700">Error Image upload(image must be less than 2 mb</span>) : filePerc >0 && filePerc < 100 ? (<span className="text-slate-700">
+          {fileUploadError ? (<span className="text-red-700">Error Image upload(image must be less than 2 mb)</span>) : filePerc >0 && filePerc < 100 ? (<span className="text-slate-700">
             {`Uploading ${filePerc}%`}
           </span>)
           :
           filePerc === 100 ? (
             <span className="text-green-700">Image successfully uploaded!</span>
           ):(
-            ''
+            ""
           )}
         </p>
         <input

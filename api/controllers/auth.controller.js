@@ -13,24 +13,24 @@ export const signup = async (req, res, next) => {
   res.status(201).json("user created successfully!")
   } catch (error) {
     next(error);
-    //next(errorHandler(550,'error from the function))
+    //next(errorHandler(550,'error from the function))  this will use when we want give error like your password is not strong
   }
   
 };
 
 export const signin = async (req, res, next) => {
-  const { email, password} = req.body;
+  const { email, password} = req.body;  //get data from body
   try {
       const validUser = await User.findOne({email});//findone is mongodb function{email: email}-> before ES6
       if (!validUser) return next(errorHandler(404, 'User not found!'));
       const validPassword = bcryptjs.compareSync(password, validUser.password);
       if(!validPassword) return next(errorHandler(401, 'Invalid password!'))
-      const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET)
-      const {password: pass, ...rest } = validUser._doc;
-      res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest)
+      const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET) //to authenticate the user for forther operation(like change the password)
+      const {password: pass, ...rest } = validUser._doc;//password is not sent in the response to getting leaked
+      res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest) //save as cookies in browser and send the response(validuser<->rest)
     
   } catch (error) {
-    next(error);
+    next(error); //by middleware in index.js to handle error
   }
 }
 
