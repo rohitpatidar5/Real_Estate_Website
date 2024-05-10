@@ -2,6 +2,7 @@ import { errorHandler } from "./error.js";
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
+    //in order to take any data from the cookies we need to install the package called cookies partser
     const token = req.cookies.access_token;
 
     if(!token) return next(errorHandler(401, 'Unauthorized'));
