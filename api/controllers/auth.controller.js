@@ -4,30 +4,47 @@ import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken'
 
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
+  const { username, email, password } = req.body; //distructre the req.body json file
+
+  if(                                         //if all the fields are empty so we throw a custom error
+    !username || 
+    !email || 
+    !password || 
+    username === '' || 
+    email === '' || 
+    password === ''
+    ){
+    next(errorHandler(400, 'All fields are required'));
+  };
+
+  const hashedPassword = bcryptjs.hashSync(password, 10);//for decrypting the password
+  const newUser = new User({ username, email, password: hashedPassword }); //create newUser using the User model
 
   try {
-    await newUser.save()
+    await newUser.save() //save the user on database mongodb
   res.status(201).json("user created successfully!")
   } catch (error) {
+    // res.status(500).json(error.message)
+    //next(errorHandler(550,'error from the function'))  this will use when we want give error like your password is not strong|custom error function
     next(error);
-    //next(errorHandler(550,'error from the function))  this will use when we want give error like your password is not strong
   }
   
 };
 
 export const signin = async (req, res, next) => {
-  const { email, password} = req.body;  //get data from body
+  const { email, password} = req.body;  //get the data from body |destructuring
   try {
       const validUser = await User.findOne({email});//findone is mongodb function{email: email}-> before ES6
       if (!validUser) return next(errorHandler(404, 'User not found!'));
       const validPassword = bcryptjs.compareSync(password, validUser.password);
       if(!validPassword) return next(errorHandler(401, 'Invalid password!'))
       const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET) //to authenticate the user for forther operation(like change the password)
-      const {password: pass, ...rest } = validUser._doc;//password is not sent in the response to getting leaked
-      res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest) //save as cookies in browser and send the response(validuser<->rest)
+      const {password: pass, ...rest } = validUser._doc;//destructure the password |password is not sent in the response to getting leaked| here above we are using password termas a constant so we cant use it again so we use pass
+      res
+      .cookie('access_token', token, { httpOnly: true })  //save the token as cookies in browser and send the response(validuser<->rest) -->with no expiry it is sesson
+      .status(200)
+      .json(rest)
+      //res.cookie('access_token', token, { httpOnly: true, expires:new Date(Date.now() + 24 * 60 * 60 *100) }).status(200).json(rest) 
     
   } catch (error) {
     next(error); //by middleware in index.js to handle error
