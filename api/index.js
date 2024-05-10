@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 const app = express()
 
 app.use(express.json());//this is going to allow json as an input of the server because by default server cant accept json file
-app.use(cookieParser()); //alow us to get information from the cookies
+app.use(cookieParser()); //allow us to get information from the cookies
 
 
 
@@ -39,7 +39,7 @@ app.use((err, req, res, next) => { //next is use for go to the next middlerware
     const message = err.message || 'Internal Server Error';
     return res.status(statusCode).json({
         success: false,
-        statusCode,    //statusCode: statuscode(ES6)
+        statusCode,    //statusCode: statuscode( before ES6)
         message,
     })
 

@@ -15,14 +15,14 @@ export const updateUser = async (req, res, next) => {
             req.body.passwordn= bcryptjs.hashSync(req.body.password, 10)
         }
         const updatedUser = await User.findByIdAndUpdate(req.params.id,{
-            $set:{
+            $set:{             //we use set because some we want to update some data not all
                 username: req.body.username,
                 eamil: req.body.email,
                 password: req.body.password,
                 avatar: req.body.avatar,
             }
         },
-        {new: true}) 
+        {new: true}) //updated with new information
 
         const {password, ...rest} = updatedUser._doc
 
