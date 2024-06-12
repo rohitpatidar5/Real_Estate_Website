@@ -19,7 +19,7 @@ const app = express()
 app.use(express.json());//this is going to allow json as an input of the server because by default server cant accept json file
 app.use(cookieParser()); //allow us to get information from the cookies
 
-
+ 
 
 
 
